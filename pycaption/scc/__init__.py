@@ -247,6 +247,7 @@ class SCCReader(BaseReader):
         for caption in self.caption_stash._collection:
             caption_text = "".join(caption.to_real_caption().get_text_nodes())
             lines.extend(caption_text.split("\n"))
+        """ # Disable character limits on reading, because some allows longer lines.
         lines_too_long = [line for line in lines if len(line) > 32]
 
         if bool(lines_too_long):
@@ -256,6 +257,7 @@ class SCCReader(BaseReader):
             raise CaptionLineLengthError(
                 f"32 character limit for caption cue in scc file.\n" f"Lines longer than 32:\n" f"{msg}"
             )
+        """
 
         for cap in captions.get_captions(lang):
             # if there's an end time on a caption and the difference is

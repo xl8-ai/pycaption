@@ -247,6 +247,26 @@ class TestSCCReader(ReaderTestingMixIn):
         assert exc_info.value.args[0].startswith("Unsupported cue duration around 00:00:20.433")
 
     def test_line_too_long(self, sample_scc_with_line_too_long):
+        expected_lines = [
+            "KELLY JAMES: How",
+            "the show started",
+            "was Cal l l l l l l l l l l l l l l l l l l l l l l l l l l l l Denison, a friend",
+            "of ours, was doing my CDs.",
+            "And he said, I can do a TV show.",
+            "I just wanted one show,",
+            "just to have as a little",
+        ]
+
+        caption_set = SCCReader().read(sample_scc_with_line_too_long)
+        actual_lines = [
+            node.content
+            for cap_ in caption_set.get_captions("en-US")
+            for node in cap_.nodes
+            if node.type_ == CaptionNode.TEXT
+        ]
+        assert expected_lines == actual_lines
+
+        """ # Disable long line check
         with pytest.raises(CaptionLineLengthError) as exc_info:
             SCCReader().read(sample_scc_with_line_too_long)
 
@@ -255,6 +275,7 @@ class TestSCCReader(ReaderTestingMixIn):
             "was Cal l l l l l l l l l l l l l l l l l l l l l l l l l l l l Denison, a friend - Length 81"
             in exc_info.value.args[0].split("\n")
         )
+        """
 
 
 class TestCoverageOnly:
