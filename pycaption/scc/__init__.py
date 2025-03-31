@@ -259,6 +259,7 @@ class SCCReader(BaseReader):
             )
         """
 
+        """ # Allow scc files with invalid timecodes, rather than rejecting it.
         for cap in captions.get_captions(lang):
             # if there's an end time on a caption and the difference is
             # less than .05s kill it (this is likely caused by a standalone
@@ -269,6 +270,7 @@ class SCCReader(BaseReader):
                     f'for line beginning with "{cap.get_text()}". Duration '
                     f"must be at least 0.05 seconds."
                 )
+        """
 
         if captions.is_empty():
             raise CaptionReadNoCaptions("empty caption file")
